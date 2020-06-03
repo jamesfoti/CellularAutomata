@@ -8,15 +8,25 @@ public class Cell : MonoBehaviour {
 
 	[HideInInspector]
 	public bool isAlive;
+	[HideInInspector]
 	public Material material;
-	public float neighborRadius = 1f;
+
+	public Player player;
+
+	private float neighborRadius;
 
 	private void Awake() {
 		this.material = GetComponent<Renderer>().material;
+		this.neighborRadius = FindObjectOfType<GridManager>().detectionRadius;
+		this.material.color = Color.black;
+		this.tag = "isDead";
+		this.player = FindObjectOfType<Player>();
 	}
 
 	private void Update() {
-		// CheckNeighbors()
+		if (player.startingClicks == 0) {
+			CheckNeighbors();
+		}
 	}
 
 	private void CheckNeighbors() {
@@ -41,11 +51,11 @@ public class Cell : MonoBehaviour {
 	}
 
 	private int CountNearbyLiveCells() {
-		Collider2D[] neighborCells = Physics2D.OverlapCircleAll(this.transform.position, neighborRadius);
+		Collider[] neighborCells = Physics.OverlapSphere(this.transform.position, neighborRadius);
 
 		int numAliveCells = 0;
 
-		foreach (Collider2D cellCollider in neighborCells) {
+		foreach (Collider cellCollider in neighborCells) {
 			if (cellCollider.tag == "isAlive") {
 				numAliveCells++;
 			}
@@ -60,7 +70,7 @@ public class Cell : MonoBehaviour {
 
 		if (numAliveCells < 2) {
 			this.tag = "isDead";
-			this.material.color = Color.white;
+			this.material.color = Color.black;
 		}
 	}
 
@@ -68,7 +78,7 @@ public class Cell : MonoBehaviour {
 		
 		if (numAlivecells == 2 || numAlivecells == 3) {
 			this.tag = "isAlive";
-			this.material.color = Color.green;
+			this.material.color = Color.white;
 		}
 	}
 
@@ -76,7 +86,7 @@ public class Cell : MonoBehaviour {
 
 		if (numAliveCells > 3) {
 			this.tag = "isDead";
-			this.material.color = Color.white;
+			this.material.color = Color.black;
 		}
 	}
 
@@ -84,7 +94,7 @@ public class Cell : MonoBehaviour {
 		
 		if (numAlivecells == 3) {
 			this.tag = "isAlive";
-			this.material.color = Color.green;
+			this.material.color = Color.white;
 		}
 	}
 
