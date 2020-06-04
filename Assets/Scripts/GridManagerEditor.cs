@@ -20,7 +20,7 @@ public class GridManagerEditor : Editor {
 		}
 
 		if (GUILayout.Button("Clear Grid")) {
-			gridManager.ClearGrid();
+			
 		}
 	}
 }

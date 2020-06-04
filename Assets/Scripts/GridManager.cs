@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -7,19 +8,21 @@ using UnityEngine.Tilemaps;
 public class GridManager : MonoBehaviour {
 
 	public Cell cell;
-	public float detectionRadius;
+	public Color color;
 
 	[HideInInspector]
-	public List<Cell> cells = new List<Cell>();
+	public Cell[,] cells;
+	public List<Cell> listCells = new List<Cell>();
+	public Dictionary<Cell, Vector2> cellIndicies = new Dictionary<Cell, Vector2>();
 
 	[SerializeField]
 	private Vector3 gridOrigin;
 	[SerializeField]
 	[Range(0f, 100f)]
-	private int numRows;
+	public int numRows;
 	[SerializeField]
 	[Range(0f, 100f)]
-	private int numCols;
+	public int numCols;
 	[SerializeField]
 	[Range(0f, 100f)]
 	private float tileSize;
@@ -28,13 +31,23 @@ public class GridManager : MonoBehaviour {
 	
 	public bool autoUpdate;
 
+	private GameManager gameManager;
+
+	private void Awake() {
+		gameManager = GetComponent<GameManager>();
+	}
+
 	private void Start() {
 		GenerateGrid();
 	}
 
-	public void GenerateGrid() {
-		ClearGrid(); // Clear grid if one aleady exists
+	private void Update() {
+		if (gameManager.isPlaying) {
+			// Update
+		}
+	}
 
+	public void GenerateGrid() {
 		for (int row = 0; row < numRows; row++) {
 			for (int col = 0; col < numCols; col++) {
 
@@ -45,28 +58,12 @@ public class GridManager : MonoBehaviour {
 				Cell cell = Instantiate(this.cell, parent: this.transform);
 				cell.transform.localPosition = cellPosition;
 				cell.transform.localScale = new Vector3(tileSize, tileSize, cell.transform.localScale.z);
-
-				cells.Add(cell);
 			}
 		}
 
 		float gridWidth = numCols * tileSize;
 		float gridHeight = numRows * tileSize;
 		this.transform.position = new Vector2(-gridWidth / 2 + tileSize / 2, gridHeight / 2 - tileSize / 2) * (Vector2.one + (Vector2)spacing);
-	}
-
-	public void ClearGrid() {
-		foreach (Cell cell in cells) {
-			if (cell != null) {
-				if (EditorApplication.isPlaying) {
-					Destroy(cell.gameObject);
-				}
-				else {
-					DestroyImmediate(cell.gameObject);
-				}
-			}
-		}
-		cells.Clear();
 	}
 
 }
