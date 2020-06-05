@@ -8,37 +8,30 @@ using UnityEngine.UIElements;
 
 public class Cell : MonoBehaviour {
 
-	public enum States {
-		Dead, Alive
-	}
-
+	public enum States {Dead, Alive}
 	public States currentState;
 	public States nextState;
-
 	public int rowPos;
 	public int colPos;
-
 	public GameManager gameManager;
-
+	public GridManager grid;
 	public Material material;
-	public TextMesh text;
 
-	public int neighbors;
+	private int neighbors;
 
 	private void Awake() {
 		material = GetComponent<SpriteRenderer>().material;
-		material.color = Color.black;
-		currentState = States.Dead;
 		gameManager = FindObjectOfType<GameManager>();
+		grid = FindObjectOfType<GridManager>();
 	}
 
 	private void Start() {
 		currentState = States.Dead;
+		material.color = Color.black; // Every cell starts out dead for now
 	}
 
 	private void Update() {
 		neighbors = CountNearbyNeighbors();
-		text.text = neighbors.ToString();
 	}
 
 	public void UpdateCell() {
@@ -57,7 +50,6 @@ public class Cell : MonoBehaviour {
 	}
 
 	public void UpdateColors() {
-
 		if (currentState == States.Alive) {
 			material.color = Color.white;
 		}
@@ -67,18 +59,20 @@ public class Cell : MonoBehaviour {
 	}
 
 	public int CountNearbyNeighbors() {
-
-		Collider2D[] livingNeighbors = Physics2D.OverlapCircleAll(this.transform.position, gameManager.cellDetectionRadius);
-		
-
 		int count = 0;
-		foreach (Collider2D liveNeighbor in livingNeighbors) {
-			if (liveNeighbor.GetComponent<Cell>().currentState == Cell.States.Alive) {
-				count++;
+		for (int i = -1; i < 2; i++) {
+			for (int j = -1; j < 2; j++) {
+				int row = (rowPos + i + grid.numRows) % grid.numRows;
+				int col = (colPos + j + grid.numCols) % grid.numCols;
+				
+				if (grid.cells[row, col].currentState == Cell.States.Alive) {
+					count++;
+				}
 			}
 		}
 
-		if (this.currentState == States.Alive) {
+		if (currentState == States.Alive) {
+			// if this cell is alive, then don't include it
 			count--;
 		}
 
@@ -98,8 +92,5 @@ public class Cell : MonoBehaviour {
 		UpdateColors();
 	}
 
-	void OnDrawGizmosSelected() {
-		Gizmos.DrawWireSphere(transform.position, gameManager.cellDetectionRadius);
-	}
 }
 
