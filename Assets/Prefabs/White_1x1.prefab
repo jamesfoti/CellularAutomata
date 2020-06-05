@@ -31,7 +31,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 6746133089066326760}
+  - {fileID: 2054502695151289357}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -102,9 +102,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 599e5daa48309734f83c7fd9283049d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text: {fileID: 3172880478494988926}
   currentState: 0
   nextState: 0
+  rowPos: 0
+  colPos: 0
+  gameManager: {fileID: 0}
+  material: {fileID: 0}
+  text: {fileID: 1457559317635706441}
 --- !u!61 &-6200786949043772687
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -139,7 +143,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2553780413945098504}
   m_CullTransparentMesh: 0
---- !u!1 &8320430933076368440
+--- !u!1 &5985955613239178276
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -147,24 +151,23 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6746133089066326760}
-  - component: {fileID: 8173589758265669138}
-  - component: {fileID: 3172880478494988926}
-  - component: {fileID: 6984943043285466525}
+  - component: {fileID: 2054502695151289357}
+  - component: {fileID: 6350476539784179086}
+  - component: {fileID: 1457559317635706441}
   m_Layer: 0
   m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!224 &6746133089066326760
+  m_IsActive: 1
+--- !u!224 &2054502695151289357
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8320430933076368440}
+  m_GameObject: {fileID: 5985955613239178276}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -172,18 +175,18 @@ RectTransform:
   m_Father: {fileID: 1430880372353045832}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.086, y: 0.013}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.51438814, y: 0.4939344}
---- !u!23 &8173589758265669138
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -0.0000073313713, y: 0.0000009536743}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!23 &6350476539784179086
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8320430933076368440}
+  m_GameObject: {fileID: 5985955613239178276}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -195,7 +198,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e3265ab4bf004d28a9537516768c1c75, type: 3}
+  - {fileID: 10100, guid: 0000000000000000e000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -216,33 +219,25 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!102 &3172880478494988926
+--- !u!102 &1457559317635706441
 TextMesh:
   serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8320430933076368440}
+  m_GameObject: {fileID: 5985955613239178276}
   m_Text: 0
   m_OffsetZ: 0
-  m_CharacterSize: 0.08
-  m_LineSpacing: 4.19
-  m_Anchor: 5
-  m_Alignment: 0
-  m_TabSize: 2
-  m_FontSize: 30
+  m_CharacterSize: 1
+  m_LineSpacing: 1
+  m_Anchor: 4
+  m_Alignment: 1
+  m_TabSize: 4
+  m_FontSize: 0
   m_FontStyle: 0
   m_RichText: 0
-  m_Font: {fileID: 12800000, guid: e3265ab4bf004d28a9537516768c1c75, type: 3}
+  m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
   m_Color:
     serializedVersion: 2
-    rgba: 4281007872
---- !u!222 &6984943043285466525
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8320430933076368440}
-  m_CullTransparentMesh: 0
+    rgba: 4278255393

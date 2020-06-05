@@ -8,12 +8,12 @@ using UnityEngine.Tilemaps;
 public class GridManager : MonoBehaviour {
 
 	public Cell cell;
+
 	public Color color;
 
 	[HideInInspector]
 	public Cell[,] cells;
 	public List<Cell> listCells = new List<Cell>();
-	public Dictionary<Cell, Vector2> cellIndicies = new Dictionary<Cell, Vector2>();
 
 	[SerializeField]
 	private Vector3 gridOrigin;
@@ -35,6 +35,7 @@ public class GridManager : MonoBehaviour {
 
 	private void Awake() {
 		gameManager = GetComponent<GameManager>();
+		listCells = new List<Cell>();
 	}
 
 	private void Start() {
@@ -43,11 +44,19 @@ public class GridManager : MonoBehaviour {
 
 	private void Update() {
 		if (gameManager.isPlaying) {
-			// Update
+			for (int i = 0; i < listCells.Count; i++) {
+				listCells[i].UpdateCell();
+			}
 		}
 	}
 
+
 	public void GenerateGrid() {
+
+		ClearGrid();
+
+		cells = new Cell[numRows, numCols];
+
 		for (int row = 0; row < numRows; row++) {
 			for (int col = 0; col < numCols; col++) {
 
@@ -58,6 +67,11 @@ public class GridManager : MonoBehaviour {
 				Cell cell = Instantiate(this.cell, parent: this.transform);
 				cell.transform.localPosition = cellPosition;
 				cell.transform.localScale = new Vector3(tileSize, tileSize, cell.transform.localScale.z);
+				cell.rowPos = row;
+				cell.colPos = col;
+
+				cells[row, col] = cell;
+				listCells.Add(cell);
 			}
 		}
 
@@ -66,4 +80,41 @@ public class GridManager : MonoBehaviour {
 		this.transform.position = new Vector2(-gridWidth / 2 + tileSize / 2, gridHeight / 2 - tileSize / 2) * (Vector2.one + (Vector2)spacing);
 	}
 
+	public void ClearGrid() {
+		foreach (Cell cell in listCells) {
+			if (cell != null) {
+				if (EditorApplication.isPlaying) {
+					Destroy(cell.gameObject);
+				}
+				else {
+					DestroyImmediate(cell.gameObject);
+				}
+			}
+		}
+
+		if (cells != null) {
+			Array.Clear(cells, 0, cells.Length);
+		}
+	}
+
+
+	public int CountLiveNeighbors(int x, int y) {
+
+		int count = 0;
+
+		for (int i = -1; i < 2; i++) {
+			for (int j = -1; j < 2; j++) {
+
+				int row = (x + j + numRows) % numRows;
+				int col = (y + i + numCols) % numCols;
+				
+				count += (int)cells[row, col].currentState;
+			}
+		}
+		count -= (int)cells[x, y].currentState;
+
+
+		Debug.Log(count);
+		return count;
+	}
 }

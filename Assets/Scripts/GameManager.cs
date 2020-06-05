@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour {
 
+	public float cellDetectionRadius;
 	public float timeDelay;
 	public bool isPlaying = false;
 	public GridManager gridManager;
