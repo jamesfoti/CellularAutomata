@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Tilemaps;
+using Random = System.Random;
 
 public class GridManager : MonoBehaviour {
 
 	public Cell cell;
 
-	public Color color;
-
 	[HideInInspector]
 	public Cell[,] cells;
+	[HideInInspector]
 	public List<Cell> listCells = new List<Cell>();
 
 	[SerializeField]
@@ -30,29 +30,8 @@ public class GridManager : MonoBehaviour {
 	private Vector3 spacing;
 	
 	public bool autoUpdate;
-
-	private GameManager gameManager;
-
-	private void Awake() {
-		gameManager = GetComponent<GameManager>();
-		listCells = new List<Cell>();
-	}
-
-	private void Start() {
-		GenerateGrid();
-	}
-
-	private void Update() {
-		if (gameManager.isPlaying) {
-			for (int i = 0; i < listCells.Count; i++) {
-				listCells[i].UpdateCell();
-			}
-		}
-	}
-
-
+	
 	public void GenerateGrid() {
-
 		ClearGrid();
 
 		cells = new Cell[numRows, numCols];
@@ -95,11 +74,11 @@ public class GridManager : MonoBehaviour {
 		if (cells != null) {
 			Array.Clear(cells, 0, cells.Length);
 		}
+		listCells.Clear();
 	}
 
 
 	public int CountLiveNeighbors(int x, int y) {
-
 		int count = 0;
 
 		for (int i = -1; i < 2; i++) {
@@ -113,8 +92,25 @@ public class GridManager : MonoBehaviour {
 		}
 		count -= (int)cells[x, y].currentState;
 
-
-		Debug.Log(count);
 		return count;
+	}
+
+	public void RandomizeCells() {
+		for (int i = 0; i < listCells.Count; i++) {
+			Array values = Enum.GetValues(typeof(Cell.States));
+			Cell.States randomState = (Cell.States)values.GetValue(UnityEngine.Random.Range(0, values.Length));
+
+			listCells[i].currentState = randomState;
+			listCells[i].UpdateColors();
+		}
+	}
+
+	public void ResetGrid() {
+		for (int i = 0; i < listCells.Count; i++) {
+			// Reset states
+			listCells[i].currentState = Cell.States.Dead;
+			listCells[i].nextState = Cell.States.Dead;
+			listCells[i].UpdateColors();
+		}
 	}
 }

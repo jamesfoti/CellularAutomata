@@ -13,40 +13,51 @@ public class Cell : MonoBehaviour {
 	public States nextState;
 	public int rowPos;
 	public int colPos;
-	public GameManager gameManager;
-	public GridManager grid;
-	public Material material;
 
+	private GridManager grid;
+	private Material material;
 	private int neighbors;
 
 	private void Awake() {
 		material = GetComponent<SpriteRenderer>().material;
-		gameManager = FindObjectOfType<GameManager>();
 		grid = FindObjectOfType<GridManager>();
 	}
 
 	private void Start() {
+		// Every cell starts out dead for now
 		currentState = States.Dead;
-		material.color = Color.black; // Every cell starts out dead for now
+		material.color = Color.black;
 	}
 
 	private void Update() {
-		neighbors = CountNearbyNeighbors();
+		neighbors = CountNearbyNeighbors(); // Always checking neighbors
 	}
 
 	public void UpdateCell() {
-		if (currentState == States.Dead && neighbors == 3) {
-			nextState = States.Alive;
+		if (currentState == States.Alive) {
+			if (neighbors < 2) {
+				// Underpopulation
+				nextState = States.Dead;
+			}
+			else if (neighbors == 2 || neighbors == 3) {
+				// Remains alive
+				nextState = States.Alive;
+			}
+			else if (neighbors > 3) {
+				// Overpopulation
+				nextState = States.Dead;
+			}
 		}
-		else if (currentState == States.Alive && (neighbors < 2 || neighbors > 3)) {
-			nextState = States.Dead;
-		}
-		else {
-			nextState = currentState;
+		else if (currentState == States.Dead) {
+			if (neighbors == 3) {
+				// Reproduction
+				nextState = States.Alive;
+			}
 		}
 
 		currentState = nextState;
 		UpdateColors();
+		
 	}
 
 	public void UpdateColors() {
@@ -59,6 +70,7 @@ public class Cell : MonoBehaviour {
 	}
 
 	public int CountNearbyNeighbors() {
+		// Iteration over a 3x3 grid where this cell is the center
 		int count = 0;
 		for (int i = -1; i < 2; i++) {
 			for (int j = -1; j < 2; j++) {
@@ -72,13 +84,11 @@ public class Cell : MonoBehaviour {
 		}
 
 		if (currentState == States.Alive) {
-			// if this cell is alive, then don't include it
+			// If this cell is alive, then don't include it
 			count--;
 		}
 
 		return count;
-
-
 	}
 
 

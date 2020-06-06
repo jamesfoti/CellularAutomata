@@ -1,32 +1,32 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+using JetBrains.Annotations;
 
 public class GameManager : MonoBehaviour {
 
-	public float cellDetectionRadius;
 	public float timeDelay;
+	[HideInInspector]
 	public bool isPlaying = false;
-	public GridManager gridManager;
 
-	public void Play() {
-		Debug.Log("Play!");
-		isPlaying = true;
+	private GridManager grid;
+
+
+	private void Awake() {
+		grid = GetComponent<GridManager>();
 	}
 
-	public void Pause() {
-		Debug.Log("Pause!");
-		isPlaying = false;
+	private void Start() {
+		grid.GenerateGrid();
 	}
 
-	public void Reset() {
-		Debug.Log("Reset!");
-		isPlaying = false;
-		gridManager.GenerateGrid();
-	}
-
-	public IEnumerator ExecuteAfterTime(float time) {
-		yield return new WaitForSeconds(time);
+	private void Update() {
+		if (isPlaying) {
+			for (int i = 0; i < grid.listCells.Count; i++) {
+				grid.listCells[i].UpdateCell();
+			}
+		}
 	}
 
 
