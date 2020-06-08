@@ -15,18 +15,21 @@ public class Cell : MonoBehaviour {
 	public int colPos;
 
 	private GridManager grid;
-	private Material material;
+	private AutomataManager autoManager;
+	private SpriteRenderer render;
 	private int neighbors;
 
+
 	private void Awake() {
-		material = GetComponent<SpriteRenderer>().material;
+		render = GetComponent<SpriteRenderer>();
 		grid = FindObjectOfType<GridManager>();
+		autoManager = FindObjectOfType<AutomataManager>();
 	}
 
 	private void Start() {
 		// Every cell starts out dead for now
 		currentState = States.Dead;
-		material.color = Color.black;
+		render.color = autoManager.deadColor;
 	}
 
 	private void Update() {
@@ -62,10 +65,10 @@ public class Cell : MonoBehaviour {
 
 	public void UpdateColors() {
 		if (currentState == States.Alive) {
-			material.color = Color.white;
+			render.color = Color.Lerp(render.color, autoManager.aliveColor, autoManager.colorLerpTime);
 		}
 		else if (currentState == States.Dead) {
-			material.color = Color.black;
+			render.color = Color.Lerp(render.color, autoManager.deadColor, autoManager.colorLerpTime);
 		}
 	}
 
@@ -93,6 +96,7 @@ public class Cell : MonoBehaviour {
 
 
 	void OnMouseDown() {
+		Debug.Log("Clicked on [" + grid.numRows + ", " + grid.numCols + "]");
 		if (currentState == States.Alive) {
 			currentState = States.Dead;
 		}
