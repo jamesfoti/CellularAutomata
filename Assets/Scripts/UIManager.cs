@@ -7,11 +7,13 @@ public class UIManager : MonoBehaviour {
 
 	private GameManager gameManager;
 	private GridManager gridManager;
+	private AutomataManager autoManager;
 	private TextMeshProUGUI playText;
 
 	private void Awake() {
 		gameManager = GetComponent<GameManager>();
 		gridManager = GetComponent<GridManager>();
+		autoManager = GetComponent<AutomataManager>();
 		playText = GameObject.Find("PlayText (TMP)").GetComponent<TextMeshProUGUI>();
 	}
 
@@ -25,7 +27,6 @@ public class UIManager : MonoBehaviour {
 			gameManager.isPlaying = true;
 		}
 	}
-
 
 	public void Play() {
 		if (!gameManager.isPlaying) {
@@ -44,13 +45,16 @@ public class UIManager : MonoBehaviour {
 		Debug.Log("Reset!");
 		gameManager.isPlaying = false;
 		playText.text = "Play";
-		gridManager.ResetGrid();
+		autoManager.ResetGrid();
+	}
+
+	public void PseudoRandomize() {
+		Debug.Log("Pseudo Randomized!");
+		autoManager.PseudoRandFillGrid();
 	}
 
 	public void Randomize() {
-		Debug.Log("Reset!");
-		gameManager.isPlaying = false;
-		playText.text = "Play";
-		gridManager.RandomizeCells();
+		Debug.Log("Randomized!");
+		autoManager.RandomFillGrid();
 	}
 }

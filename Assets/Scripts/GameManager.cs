@@ -11,10 +11,12 @@ public class GameManager : MonoBehaviour {
 	public bool isPlaying = false;
 
 	private GridManager grid;
+	private AutomataManager autoManager;
 
 
 	private void Awake() {
 		grid = GetComponent<GridManager>();
+		autoManager = GetComponent<AutomataManager>();
 	}
 
 	private void Start() {
@@ -23,11 +25,10 @@ public class GameManager : MonoBehaviour {
 
 	private void Update() {
 		if (isPlaying) {
-			for (int i = 0; i < grid.listCells.Count; i++) {
-				grid.listCells[i].UpdateCell();
-			}
+			autoManager.SmoothGrid();
 		}
 	}
+
 
 
 }

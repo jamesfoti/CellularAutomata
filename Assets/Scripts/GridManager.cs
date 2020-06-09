@@ -94,7 +94,7 @@ public class GridManager : MonoBehaviour {
 
 		return count;
 	}
-
+	/*
 	public void RandomizeCells() {
 		for (int i = 0; i < listCells.Count; i++) {
 			Array values = Enum.GetValues(typeof(Cell.States));
@@ -103,14 +103,5 @@ public class GridManager : MonoBehaviour {
 			listCells[i].currentState = randomState;
 			listCells[i].UpdateColors();
 		}
-	}
-
-	public void ResetGrid() {
-		for (int i = 0; i < listCells.Count; i++) {
-			// Reset states
-			listCells[i].currentState = Cell.States.Dead;
-			listCells[i].nextState = Cell.States.Dead;
-			listCells[i].UpdateColors();
-		}
-	}
+	}*/
 }
