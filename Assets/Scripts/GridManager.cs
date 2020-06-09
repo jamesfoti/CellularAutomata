@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEditor;
 using UnityEngine;
 using Random = System.Random;
 
@@ -62,12 +59,15 @@ public class GridManager : MonoBehaviour {
 	public void ClearGrid() {
 		foreach (Cell cell in listCells) {
 			if (cell != null) {
-				if (EditorApplication.isPlaying) {
-					Destroy(cell.gameObject);
-				}
-				else {
-					DestroyImmediate(cell.gameObject);
-				}
+
+				#if UNITY_EDITOR
+				DestroyImmediate(cell.gameObject);
+				continue;
+				#endif
+
+				Destroy(cell.gameObject);
+				
+
 			}
 		}
 
