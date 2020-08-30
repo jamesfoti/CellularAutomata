@@ -1,1 +1,1 @@
-# GameOfLife
+# CellularAutomota
