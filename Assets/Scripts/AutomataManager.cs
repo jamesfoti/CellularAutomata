@@ -13,18 +13,8 @@ public class AutomataManager : MonoBehaviour {
 
 	private GridManager grid;
 
-
 	private void Awake() {
 		grid = GetComponent<GridManager>();
-	}
-
-	public void GenerateCave() {
-		// This is gonna be used but for different rules other than Game of Life
-		PseudoRandFillGrid();
-
-		for (int i = 0; i < smoothIterations; i++) {
-			SmoothGrid();
-		}
 	}
 
 	public void ResetGrid() {
@@ -35,38 +25,62 @@ public class AutomataManager : MonoBehaviour {
 		UpdateGridColors();
 	}
 
-	public void PseudoRandFillGrid() {
+	public void RandomFillGrid(bool useRandomSeed, string seed, int randomFillPercent) {
 		if (useRandomSeed) {
 			seed = Time.time.ToString();
 		}
 
-		System.Random pseudoRandom = new System.Random(seed.GetHashCode());
+		//System.Random prng = new System.Random(seed.GetHashCode());
 
 		for (int i = 0; i < grid.listCells.Count; i++) {
-			if (pseudoRandom.Next(0, 100) < randomFillPercent) {
+			/*Array values = Enum.GetValues(typeof(Cell.States));
+			Cell.States randomState = (Cell.States)values.GetValue(UnityEngine.Random.Range(0, values.Length));*/
+			if (UnityEngine.Random.Range(0, 100) < randomFillPercent) {
 				grid.listCells[i].currentState = Cell.States.Alive;
 			}
 			else {
 				grid.listCells[i].currentState = Cell.States.Dead;
 			}
+
+			//grid.listCells[i].currentState = randomState;
 			
 		}
-		UpdateGridColors(lerp: false);
+		UpdateGridColors();
 	}
 
-	public void RandomFillGrid() {
-		for (int i = 0; i < grid.listCells.Count; i++) {
-			Array values = Enum.GetValues(typeof(Cell.States));
-			Cell.States randomState = (Cell.States)values.GetValue(UnityEngine.Random.Range(0, values.Length));
-
-			grid.listCells[i].currentState = randomState;
-			UpdateGridColors();
-		}
-	}
-
-	public void SmoothGrid() {
+	public void Life() {
 		for (int i = 0; i < grid.listCells.Count; i++) {
 		
+			int livingNeighbors = GetNearbyNeighbors(grid.listCells[i].rowPos, grid.listCells[i].colPos);
+
+			if (grid.listCells[i].currentState == Cell.States.Alive) {
+				if (livingNeighbors == 2 || livingNeighbors == 3) {
+					grid.listCells[i].nextState = Cell.States.Alive;
+				}
+				else {
+					grid.listCells[i].nextState = Cell.States.Dead;
+				}
+			}
+			if (grid.listCells[i].currentState == Cell.States.Dead) {
+				if (livingNeighbors == 3) {
+					grid.listCells[i].nextState = Cell.States.Alive;
+				}
+				else {
+					grid.listCells[i].nextState = Cell.States.Dead;
+				}
+			}
+		}
+
+		for (int i = 0; i < grid.listCells.Count; i++) {
+			grid.listCells[i].currentState = grid.listCells[i].nextState;
+		}
+
+		UpdateGridColors(lerp: true);
+	}
+
+	public void HighLife() {
+		for (int i = 0; i < grid.listCells.Count; i++) {
+
 			int livingNeighbors = GetNearbyNeighbors(grid.listCells[i].rowPos, grid.listCells[i].colPos);
 
 			if (grid.listCells[i].currentState == Cell.States.Alive) {
@@ -84,13 +98,92 @@ public class AutomataManager : MonoBehaviour {
 				if (livingNeighbors == 3) {
 					grid.listCells[i].nextState = Cell.States.Alive;
 				}
+				if (livingNeighbors == 6) {
+					grid.listCells[i].nextState = Cell.States.Alive;
+				}
+
+			}
+		}
+		for (int i = 0; i < grid.listCells.Count; i++) {
+			grid.listCells[i].currentState = grid.listCells[i].nextState;
+		}
+		UpdateGridColors(lerp: true);
+	}
+
+	public void Seeds() {
+		for (int i = 0; i < grid.listCells.Count; i++) {
+
+			int livingNeighbors = GetNearbyNeighbors(grid.listCells[i].rowPos, grid.listCells[i].colPos);
+
+			if (grid.listCells[i].currentState == Cell.States.Dead && livingNeighbors == 2) {
+				grid.listCells[i].nextState = Cell.States.Alive;
+			}
+			else {
+				grid.listCells[i].nextState = Cell.States.Dead;
 			}
 		}
 
 		for (int i = 0; i < grid.listCells.Count; i++) {
 			grid.listCells[i].currentState = grid.listCells[i].nextState;
 		}
+		UpdateGridColors(lerp: true);
+	}
 
+	public void DayAndNight() {
+		for (int i = 0; i < grid.listCells.Count; i++) {
+
+			int livingNeighbors = GetNearbyNeighbors(grid.listCells[i].rowPos, grid.listCells[i].colPos);
+
+			if (grid.listCells[i].currentState == Cell.States.Alive) {
+				if (livingNeighbors == 3 || livingNeighbors == 4 || livingNeighbors == 6 || livingNeighbors == 7 || livingNeighbors == 8) {
+					grid.listCells[i].nextState = Cell.States.Alive;
+				}
+				else {
+					grid.listCells[i].nextState = Cell.States.Dead;
+				}
+			}
+			if (grid.listCells[i].currentState == Cell.States.Dead) {
+				if (livingNeighbors == 3 || livingNeighbors == 6 || livingNeighbors == 7 || livingNeighbors == 8) {
+					grid.listCells[i].nextState = Cell.States.Alive;
+				}
+				else {
+					grid.listCells[i].nextState = Cell.States.Dead;
+				}
+
+			}
+		}
+		for (int i = 0; i < grid.listCells.Count; i++) {
+			grid.listCells[i].currentState = grid.listCells[i].nextState;
+		}
+		UpdateGridColors(lerp: true);
+	}
+
+	public void Diamoeba() {
+		for (int i = 0; i < grid.listCells.Count; i++) {
+
+			int livingNeighbors = GetNearbyNeighbors(grid.listCells[i].rowPos, grid.listCells[i].colPos);
+
+			if (grid.listCells[i].currentState == Cell.States.Alive) {
+				if (livingNeighbors == 5 || livingNeighbors == 6 || livingNeighbors == 7 || livingNeighbors == 8) {
+					grid.listCells[i].nextState = Cell.States.Alive;
+				}
+				else {
+					grid.listCells[i].nextState = Cell.States.Dead;
+				}
+			}
+			if (grid.listCells[i].currentState == Cell.States.Dead) {
+				if (livingNeighbors == 3 || livingNeighbors == 5 || livingNeighbors == 6 || livingNeighbors == 7 || livingNeighbors == 8) {
+					grid.listCells[i].nextState = Cell.States.Alive;
+				}
+				else {
+					grid.listCells[i].nextState = Cell.States.Dead;
+				}
+
+			}
+		}
+		for (int i = 0; i < grid.listCells.Count; i++) {
+			grid.listCells[i].currentState = grid.listCells[i].nextState;
+		}
 		UpdateGridColors(lerp: true);
 	}
 

@@ -27,7 +27,11 @@ public class GridManager : MonoBehaviour {
 	private Vector3 spacing;
 	
 	public bool autoUpdate;
-	
+
+	private void Start() {
+		//numCols = Screen.width;
+	}
+
 	public void GenerateGrid() {
 		ClearGrid();
 
@@ -38,7 +42,7 @@ public class GridManager : MonoBehaviour {
 
 				float xCord = col * tileSize;
 				float yCord = row * -tileSize;
-				Vector2 cellPosition = (Vector2)gridOrigin + new Vector2(xCord, yCord) * (Vector2.one + (Vector2) spacing);
+				Vector2 cellPosition = (Vector2)gridOrigin + new Vector2(xCord, yCord) * (Vector2.one + (Vector2)spacing);
 
 				Cell cell = Instantiate(this.cell, parent: this.transform);
 				cell.transform.localPosition = cellPosition;
@@ -67,7 +71,6 @@ public class GridManager : MonoBehaviour {
 
 				Destroy(cell.gameObject);
 				
-
 			}
 		}
 
@@ -76,32 +79,4 @@ public class GridManager : MonoBehaviour {
 		}
 		listCells.Clear();
 	}
-
-
-	public int CountLiveNeighbors(int x, int y) {
-		int count = 0;
-
-		for (int i = -1; i < 2; i++) {
-			for (int j = -1; j < 2; j++) {
-
-				int row = (x + j + numRows) % numRows;
-				int col = (y + i + numCols) % numCols;
-				
-				count += (int)cells[row, col].currentState;
-			}
-		}
-		count -= (int)cells[x, y].currentState;
-
-		return count;
-	}
-	/*
-	public void RandomizeCells() {
-		for (int i = 0; i < listCells.Count; i++) {
-			Array values = Enum.GetValues(typeof(Cell.States));
-			Cell.States randomState = (Cell.States)values.GetValue(UnityEngine.Random.Range(0, values.Length));
-
-			listCells[i].currentState = randomState;
-			listCells[i].UpdateColors();
-		}
-	}*/
 }

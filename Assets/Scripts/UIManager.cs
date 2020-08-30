@@ -1,58 +1,93 @@
 ﻿using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour {
 
-	private GameManager gameManager;
 	private GridManager gridManager;
 	private AutomataManager autoManager;
 	private TextMeshProUGUI playText;
+	private TMP_Dropdown dropDownValue;
+	public Slider fillPercentSlider;
+	public Slider speedSlider;
+	public TMP_Text generationCountDisplay;
+
+	private bool isPlaying = false;
+	private float lastTime = 0f;
+	private int numGenerations = 0;
 
 	private void Awake() {
-		gameManager = GetComponent<GameManager>();
 		gridManager = GetComponent<GridManager>();
 		autoManager = GetComponent<AutomataManager>();
 		playText = GameObject.Find("PlayText (TMP)").GetComponent<TextMeshProUGUI>();
+		dropDownValue = GameObject.Find("DropdownOptions").GetComponent<TMP_Dropdown>();
+	}
+
+	private void Start() {
+		Debug.Log(Camera.main.pixelWidth);
+		gridManager.GenerateGrid();
+	}
+
+	private void Update() {
+		if (isPlaying) {
+			if (Time.time - lastTime > speedSlider.maxValue - speedSlider.value) {
+				string option = dropDownValue.captionText.text;
+				if (option == "Life") {
+					autoManager.Life();
+				}
+				else if (option == "Seeds") {
+					autoManager.Seeds();
+				}
+				else if (option == "Highlife") {
+					autoManager.HighLife();
+				}
+				else if (option == "Day N' Night") {
+					autoManager.DayAndNight();
+				}
+				else if (option == "Diamoeba") {
+					autoManager.Diamoeba();
+				}
+				lastTime = Time.time;
+				numGenerations++;
+			}
+		}
+		generationCountDisplay.text = numGenerations.ToString();
 	}
 
 	public void PausePlayToggle() {
-		if (gameManager.isPlaying) {
+		if (isPlaying) {
 			playText.text = "Play";
-			gameManager.isPlaying = false;
+			isPlaying = false;
 		}
-		else if (!gameManager.isPlaying) {
+		else if (!isPlaying) {
 			playText.text = "Pause";
-			gameManager.isPlaying = true;
+			isPlaying = true;
 		}
 	}
 
 	public void Play() {
-		if (!gameManager.isPlaying) {
+		if (!isPlaying) {
 			playText.text = "Pause";
-			gameManager.isPlaying = true;
+			isPlaying = true;
 		}
 	}
 
 	public void Pause() {
 		Debug.Log("Pause!");
 		playText.text = "Play";
-		gameManager.isPlaying = false;
+		isPlaying = false;
 	}
 
 	public void Reset() {
 		Debug.Log("Reset!");
-		gameManager.isPlaying = false;
+		isPlaying = false;
 		playText.text = "Play";
 		autoManager.ResetGrid();
-	}
-
-	public void PseudoRandomize() {
-		Debug.Log("Pseudo Randomized!");
-		autoManager.PseudoRandFillGrid();
+		numGenerations = 0;
 	}
 
 	public void Randomize() {
 		Debug.Log("Randomized!");
-		autoManager.RandomFillGrid();
+		autoManager.RandomFillGrid(false, "noSeed", (int)fillPercentSlider.value);
 	}
 }

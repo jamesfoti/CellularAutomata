@@ -12,7 +12,6 @@ public class Cell : MonoBehaviour {
 	private AutomataManager autoManager;
 	public SpriteRenderer render;
 
-
 	private void Awake() {
 		render = GetComponent<SpriteRenderer>();
 		grid = FindObjectOfType<GridManager>();
