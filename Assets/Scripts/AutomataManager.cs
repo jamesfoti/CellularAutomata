@@ -247,6 +247,36 @@ public class AutomataManager : MonoBehaviour {
 		UpdateGridColors(lerp: true);
 	}
 
+	public void Mazectric() {
+		for (int i = 0; i < grid.listCells.Count; i++) {
+
+			int livingNeighbors = GetNearbyNeighbors(grid.listCells[i].rowPos, grid.listCells[i].colPos);
+
+			if (grid.listCells[i].currentState == Cell.States.Alive) {
+				if (livingNeighbors >= 1 && livingNeighbors <= 4) {
+					grid.listCells[i].nextState = Cell.States.Alive;
+				}
+				else {
+					grid.listCells[i].nextState = Cell.States.Dead;
+				}
+			}
+			if (grid.listCells[i].currentState == Cell.States.Dead) {
+				if (livingNeighbors == 3) {
+					grid.listCells[i].nextState = Cell.States.Alive;
+				}
+				else {
+					grid.listCells[i].nextState = Cell.States.Dead;
+				}
+			}
+		}
+
+		for (int i = 0; i < grid.listCells.Count; i++) {
+			grid.listCells[i].currentState = grid.listCells[i].nextState;
+		}
+
+		UpdateGridColors(lerp: true);
+	}
+
 	public void Gems() {
 		for (int i = 0; i < grid.listCells.Count; i++) {
 
@@ -262,6 +292,96 @@ public class AutomataManager : MonoBehaviour {
 			}
 			if (grid.listCells[i].currentState == Cell.States.Dead) {
 				if (livingNeighbors == 3 || livingNeighbors == 4 || livingNeighbors == 5 || livingNeighbors == 7) {
+					grid.listCells[i].nextState = Cell.States.Alive;
+				}
+				else {
+					grid.listCells[i].nextState = Cell.States.Dead;
+				}
+			}
+		}
+
+		for (int i = 0; i < grid.listCells.Count; i++) {
+			grid.listCells[i].currentState = grid.listCells[i].nextState;
+		}
+
+		UpdateGridColors(lerp: true);
+	}
+
+	public void Flakes() {
+		for (int i = 0; i < grid.listCells.Count; i++) {
+
+			int livingNeighbors = GetNearbyNeighbors(grid.listCells[i].rowPos, grid.listCells[i].colPos);
+
+			if (grid.listCells[i].currentState == Cell.States.Alive) {
+				if (livingNeighbors >= 0  && livingNeighbors <= 8) {
+					grid.listCells[i].nextState = Cell.States.Alive;
+				}
+				else {
+					grid.listCells[i].nextState = Cell.States.Dead;
+				}
+			}
+			if (grid.listCells[i].currentState == Cell.States.Dead) {
+				if (livingNeighbors == 3) {
+					grid.listCells[i].nextState = Cell.States.Alive;
+				}
+				else {
+					grid.listCells[i].nextState = Cell.States.Dead;
+				}
+			}
+		}
+
+		for (int i = 0; i < grid.listCells.Count; i++) {
+			grid.listCells[i].currentState = grid.listCells[i].nextState;
+		}
+
+		UpdateGridColors(lerp: true);
+	}
+
+	public void LongLife() {
+		for (int i = 0; i < grid.listCells.Count; i++) {
+
+			int livingNeighbors = GetNearbyNeighbors(grid.listCells[i].rowPos, grid.listCells[i].colPos);
+
+			if (grid.listCells[i].currentState == Cell.States.Alive) {
+				if (livingNeighbors == 5) {
+					grid.listCells[i].nextState = Cell.States.Alive;
+				}
+				else {
+					grid.listCells[i].nextState = Cell.States.Dead;
+				}
+			}
+			if (grid.listCells[i].currentState == Cell.States.Dead) {
+				if (livingNeighbors >= 3 && livingNeighbors <= 5) {
+					grid.listCells[i].nextState = Cell.States.Alive;
+				}
+				else {
+					grid.listCells[i].nextState = Cell.States.Dead;
+				}
+			}
+		}
+
+		for (int i = 0; i < grid.listCells.Count; i++) {
+			grid.listCells[i].currentState = grid.listCells[i].nextState;
+		}
+
+		UpdateGridColors(lerp: true);
+	}
+
+	public void Stains() {
+		for (int i = 0; i < grid.listCells.Count; i++) {
+
+			int livingNeighbors = GetNearbyNeighbors(grid.listCells[i].rowPos, grid.listCells[i].colPos);
+
+			if (grid.listCells[i].currentState == Cell.States.Alive) {
+				if (livingNeighbors == 2 || livingNeighbors == 3 || (livingNeighbors >= 5 && livingNeighbors <= 8)) {
+					grid.listCells[i].nextState = Cell.States.Alive;
+				}
+				else {
+					grid.listCells[i].nextState = Cell.States.Dead;
+				}
+			}
+			if (grid.listCells[i].currentState == Cell.States.Dead) {
+				if (livingNeighbors == 3   || (livingNeighbors >= 6 && livingNeighbors <= 8)) {
 					grid.listCells[i].nextState = Cell.States.Alive;
 				}
 				else {

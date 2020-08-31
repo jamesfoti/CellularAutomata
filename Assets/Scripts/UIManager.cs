@@ -42,7 +42,7 @@ public class UIManager : MonoBehaviour {
 				else if (option == "Highlife") {
 					autoManager.HighLife();
 				}
-				else if (option == "Day N' Night") {
+				else if (option == "Day/Night") {
 					autoManager.DayAndNight();
 				}
 				else if (option == "Diamoeba") {
@@ -54,8 +54,20 @@ public class UIManager : MonoBehaviour {
 				else if (option == "Maze") {
 					autoManager.Maze();
 				}
+				else if (option == "Mazectric") {
+					autoManager.Mazectric();
+				}
 				else if (option == "Gems") {
 					autoManager.Gems();
+				}
+				else if (option == "Flakes") {
+					autoManager.Flakes();
+				}
+				else if (option == "Long Life") {
+					autoManager.LongLife();
+				}
+				else if (option == "Stains") {
+					autoManager.Stains();
 				}
 				lastTime = Time.time;
 				numGenerations++;

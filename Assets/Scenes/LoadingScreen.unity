@@ -1112,7 +1112,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6dd6368db5c6e10449ce66f83b19d539, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  loadingScreen: {fileID: 0}
+  loadingScreen: {fileID: 1704127889}
   progressSlider: {fileID: 341406960}
   progressDisplay: {fileID: 209903932}
 --- !u!4 &1833691851
