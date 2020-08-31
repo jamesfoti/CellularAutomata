@@ -6,8 +6,8 @@ public class UIManager : MonoBehaviour {
 
 	private GridManager gridManager;
 	private AutomataManager autoManager;
-	private TextMeshProUGUI playText;
-	private TMP_Dropdown dropDownValue;
+	public TMP_Text playText;
+	public TMP_Dropdown dropDownValue;
 	public Slider fillPercentSlider;
 	public Slider speedSlider;
 	public TMP_Text generationCountDisplay;
@@ -19,11 +19,12 @@ public class UIManager : MonoBehaviour {
 	private void Awake() {
 		gridManager = GetComponent<GridManager>();
 		autoManager = GetComponent<AutomataManager>();
-		playText = GameObject.Find("PlayText (TMP)").GetComponent<TextMeshProUGUI>();
+		playText = GameObject.Find("PlayText (TMP)").GetComponent<TMP_Text>();
 		dropDownValue = GameObject.Find("DropdownOptions").GetComponent<TMP_Dropdown>();
 	}
 
 	private void Start() {
+
 		Debug.Log(Camera.main.pixelWidth);
 		gridManager.GenerateGrid();
 	}
