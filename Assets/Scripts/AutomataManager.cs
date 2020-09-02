@@ -7,7 +7,6 @@ public class AutomataManager : MonoBehaviour {
 	public Color deadColor;
 	public float colorLerpTime;
 	public float randomFillPercent;
-	public float smoothIterations;
 	public string seed;
 	public bool useRandomSeed;
 
@@ -434,8 +433,4 @@ public class AutomataManager : MonoBehaviour {
 			}
 		}
 	}
-
-
-
-
 }
