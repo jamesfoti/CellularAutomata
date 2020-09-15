@@ -48,23 +48,28 @@ public class AutomataManager : MonoBehaviour {
 	}
 
 	public void Life() {
+		// Rule set B3/S23
 		for (int i = 0; i < grid.listCells.Count; i++) {
 		
 			int livingNeighbors = GetNearbyNeighbors(grid.listCells[i].rowPos, grid.listCells[i].colPos);
 
-			if (grid.listCells[i].currentState == Cell.States.Alive) {
-				if (livingNeighbors == 2 || livingNeighbors == 3) {
+			if (grid.listCells[i].currentState == Cell.States.Dead) {
+				if (livingNeighbors == 3) {
+					// Born again. 
 					grid.listCells[i].nextState = Cell.States.Alive;
 				}
 				else {
+					// Cell dies because there is not exactly 3 live neighbors. 
 					grid.listCells[i].nextState = Cell.States.Dead;
 				}
 			}
-			if (grid.listCells[i].currentState == Cell.States.Dead) {
-				if (livingNeighbors == 3) {
+			else if (grid.listCells[i].currentState == Cell.States.Alive) {
+				if (livingNeighbors == 2 || livingNeighbors == 3) {
+					// Lives on to the next generation.
 					grid.listCells[i].nextState = Cell.States.Alive;
 				}
 				else {
+					// Cell dies due to underpopulation or overpopulation.
 					grid.listCells[i].nextState = Cell.States.Dead;
 				}
 			}
@@ -398,19 +403,19 @@ public class AutomataManager : MonoBehaviour {
 
 
 	public int GetNearbyNeighbors(int gridRow, int gridCol) {
+		// For more info: https://www.youtube.com/watch?v=FWSR_7kZuYg&t=1627s
 		int count = 0;
 		for (int i = -1; i < 2; i++) {
 			for (int j = -1; j < 2; j++) {
-				int row = (gridRow + i + grid.numRows) % grid.numRows;
-				int col = (gridCol + j + grid.numCols) % grid.numCols;
+				int row = (gridRow + i + grid.numRows) % grid.numRows; // mod(numRows) allows wrapping around on the y-axis
+				int col = (gridCol + j + grid.numCols) % grid.numCols; // mod(numCols) allows wrapping around on the x-axis
 
-				if (grid.cells[row,col].currentState == Cell.States.Alive) {
+				// Increment if neighbor cell is alive and EXCLUDE the center cell. 
+				if (grid.cells[row,col].currentState == Cell.States.Alive && (grid.cells[row, col] != grid.cells[gridRow, gridCol])) {
 					count++;
 				}
 			}
 		}
-
-		count -= (int)grid.cells[gridRow, gridCol].currentState;
 
 		return count;
 	}
